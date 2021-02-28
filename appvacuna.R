@@ -35,8 +35,8 @@ Vacunacion_por_pais_america <- subset(Vacunacion_mundial, Continente == "America
                              select = c(PAÍS, por_poblacion_vacunada))
                              
 #tmap_mode("view")
-ui  <-  fluidPage ( 
-  titlePanel("Vacunación Covid 19 por pais"),
+ui  <-  navbarPage("Vacunación Covid por pais", #fluidPage ( 
+ # titlePanel("Vacunación Covid por pais"),
   # tmapOutput ( "mapacov" ), 
   mainPanel(
   tabsetPanel(position = "below",  
@@ -62,6 +62,6 @@ output$mapamerica <- renderLeaflet({
   tmap_leaflet(ma)
 }) 
 }
-shinyApp(ui, server)   
+shinyApp(ui=ui, server=server)   
 
 

@@ -1,0 +1,12 @@
+name: Covid_Vacunacion
+title: Covid_Vacunacion
+username:
+account: webhectorurquijo
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3710700
+bundleId: 4283051
+url: https://webhectorurquijo.shinyapps.io/Covid_Vacunacion/
+when: 1614550959.75403
+asMultiple: FALSE
+asStatic: FALSE

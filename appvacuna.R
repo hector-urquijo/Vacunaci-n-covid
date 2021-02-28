@@ -30,13 +30,18 @@ vacunacovid <- read_excel("datavac.xlsx")
 Vacunacion_mundial <- merge(x= covidmundo, y=vacunacovid,  all = TRUE)
 Paises_en_proceso_de_vacunacion <- subset(Vacunacion_mundial, por_poblacion_vacunada != " "  ,
                                           select=c(PAÍS,por_poblacion_vacunada))
-#Vacunacion_mundial <- covidmundo
+Vacunacion_america <- subset(Vacunacion_mundial, PAÍS == c(Argentina,Chile,Brasil,Peru,Colombia,
+                                                           Panama,Costarica),
+                                select= c(PAÍS, por_poblacion_vacunada))
 #tmap_mode("view")
 ui  <-  fluidPage ( 
+  titlePanel("Vacunación Covid 19 por pais"),
   # tmapOutput ( "mapacov" ), 
-  leafletOutput("mapacov")
+  mainPanel(
+  tabPanel("Mundial", leafletOutput("mapacov")),
+  tabPanel("America", leafletOutput("mapamerica"))
   #  selectInput ( "var" ,  "Variable" ,  world_vars ) 
-  
+  )
 )
 
 server = function(input, output) {

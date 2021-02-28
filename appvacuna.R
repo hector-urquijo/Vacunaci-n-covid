@@ -1,3 +1,4 @@
+
 library(shiny)
 library(shinydashboard)
 library(tmap)
@@ -21,18 +22,18 @@ setwd("C:/Users/hecto/OneDrive/Documentos/hv hu 2020/vacunacion_covid/Vacunacion
 #cargar mapa   https://raw.githubusercontent.com/hector-urquijo/Vacunacion-covid/main/Paises_Mundo.shp
 #covidmundo <- st_read("https://github.com/hector-urquijo/Vacunacion-covid/raw/main/Paises_Mundo.shp")
 covidmundo <- st_read("Paises_Mundo.shp")
-#vacunacovid <- read_excel("data_vacunacion.xlsx") #proyecto politico 2022.xlsx", sheet = "covid_mundialr
+#vacunacovid <- read_excel("proyecto politico 2022.xlsx", sheet = "covid_mundialr")
 urlcov <- "https://raw.githubusercontent.com/hector-urquijo/Vacunacion-covid/main/data_vacunacion.xlsx"
 download.file(urlcov,destfile = "datavac.xlsx",mod="wb")
 vacunacovid <- read_excel("datavac.xlsx")
 
 Vacunacion_mundial <- merge(x= covidmundo, y=vacunacovid,  all = TRUE)
 Paises_en_proceso_de_vacunacion <- subset(Vacunacion_mundial, por_poblacion_vacunada != " "  ,
-                                          select=c(PAÍS,por_poblacion_vacunada))
+                                          select=c(PAÃS,por_poblacion_vacunada))
 #Vacunacion_mundial <- covidmundo
 #tmap_mode("view")
 ui  <-  fluidPage ( 
- # tmapOutput ( "mapacov" ), 
+  # tmapOutput ( "mapacov" ), 
   leafletOutput("mapacov")
   #  selectInput ( "var" ,  "Variable" ,  world_vars ) 
   
@@ -40,14 +41,15 @@ ui  <-  fluidPage (
 
 server = function(input, output) {
   #graficar
-    output$mapacov <- renderLeaflet ({
+  output$mapacov <- renderLeaflet ({
     tm <- tm_shape(Vacunacion_mundial) + tm_polygons(alpha = 0.5) +
-          tm_shape(Paises_en_proceso_de_vacunacion) + tm_polygons(col= "por_poblacion_vacunada",
+      tm_shape(Paises_en_proceso_de_vacunacion) + tm_polygons(col= "por_poblacion_vacunada",
                                                               alpha = 0.5,palette = "YlGnBu",
-                                                             legend.show=FALSE)
+                                                              legend.show=FALSE)
     tmap_leaflet(tm)
-})
+  })
   
 }
 shinyApp(ui, server)   
+
 

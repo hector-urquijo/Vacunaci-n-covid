@@ -30,30 +30,37 @@ vacunacovid <- read_excel("datavac.xlsx")
 Vacunacion_mundial <- merge(x= covidmundo, y=vacunacovid,  all = TRUE)
 Paises_en_proceso_de_vacunacion <- subset(Vacunacion_mundial, por_poblacion_vacunada != " "  ,
                                           select=c(PAÍS,por_poblacion_vacunada))
-Vacunacion_america <- subset(Vacunacion_mundial, PAÍS == c(Argentina,Chile,Brasil,Peru,Colombia,
-                                                           Panama,Costarica),
-                                select= c(PAÍS, por_poblacion_vacunada))
+America <- filter(Vacunacion_mundial, Continente == "America")
+Vacunacion_por_pais_america <- subset(Vacunacion_mundial, Continente == "America" ,
+                             select = c(PAÍS, por_poblacion_vacunada))
+                             
 #tmap_mode("view")
 ui  <-  fluidPage ( 
   titlePanel("Vacunación Covid 19 por pais"),
   # tmapOutput ( "mapacov" ), 
   mainPanel(
+  tabsetPanel(position = "below",  
   tabPanel("Mundial", leafletOutput("mapacov")),
   tabPanel("America", leafletOutput("mapamerica"))
   #  selectInput ( "var" ,  "Variable" ,  world_vars ) 
   )
 )
-
+)
 server = function(input, output) {
   #graficar
   output$mapacov <- renderLeaflet ({
     tm <- tm_shape(Vacunacion_mundial) + tm_polygons(alpha = 0.5) +
-      tm_shape(Paises_en_proceso_de_vacunacion) + tm_polygons(col= "por_poblacion_vacunada",
-                                                              alpha = 0.5,palette = "YlGnBu",
+      tm_shape(Paises_en_proceso_de_vacunacion) + 
+      tm_polygons(col= "por_poblacion_vacunada",alpha = 0.5,palette = "YlGnBu",
                                                               legend.show=FALSE)
     tmap_leaflet(tm)
   })
-  
+output$mapamerica <- renderLeaflet({  
+  ma <- tm_shape(America) + tm_polygons(alpha = 0.3)+
+    tm_shape(Vacunacion_por_pais_america) + tm_polygons("por_poblacion_vacunada",alpha = 0.5,palette = "YlGnBu",
+                                                   legend.show=FALSE) 
+  tmap_leaflet(ma)
+}) 
 }
 shinyApp(ui, server)   
 
